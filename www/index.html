@@ -69,66 +69,7 @@
     tx.executeSql('CREATE TABLE IF NOT EXISTS districts (id unique, name, region_id)');
     
 
-   // Get Region List
-    $.ajax({
-        url: "http://agromis.mfarms.org/en/regions/getallregionsbycountry/1",
-        dataType:"json",
-        success:function (region_json) {
-            
-            //Add region into db
-            $.each(region_json, function(i,item){
-
-                db.transaction(function(tx){
-                    tx.executeSql('INSERT OR REPLACE INTO regions (id, name) VALUES ("'+item.id+'", "'+item.name+'")');
-                },function(tx,error){
-                    console.log(JSON.stringify(tx.message));
-                    console.log(JSON.stringify(error));
-                },function(){
-                    document.getElementById('sql-result').innerHTML = "Region "+ i + " Success has been notified";  
-                    });
-
-
-       });
-            
-            
-        },
-        error: function(model, response) {
-            document.getElementById('sql-result').innerHTML = response.responseText;
-        }
-    });
-
-    
-
-    
-    
-    //  Get District
-    $.ajax({
-        url: "http://agromis.mfarms.org/en/districts/GetDistrictByCountry/1",
-        dataType:"json",
-        success:function (district_json) {
-            
-            //Add District into db
-            $.each(district_json, function(i,item){
-
-                db.transaction(function(tx){
-                     tx.executeSql('INSERT OR REPLACE INTO districts (id, name, region_id) VALUES ("'+item.id+'", "'+item.name+'", "'+item.region_id+'")');
-                },function(tx,error){
-                    console.log(JSON.stringify(tx.message));
-                    console.log(JSON.stringify(error));
-                },function(){
-                    document.getElementById('sql-result').innerHTML = "District "+ i + " Success has been notified";    
-                    });
-
-
-       });
-            
-            
-        },
-        error: function(model, response) {
-            document.getElementById('sql-result').innerHTML = response.responseText;
-        }
-    });
-    
+  
 
 
     }

@@ -27,7 +27,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.getElementById('sql-result').innerHTML = 'bindEvents started';
-        document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener('deviceready', app.onDeviceReady, false);
     },
     // deviceready Event Handler
     //
@@ -44,7 +44,7 @@ var app = {
         }
 
         document.getElementById('sql-result').innerHTML = 'Db creation proccess started';
-        db.transaction(this.populateDB, this.errorCB, this.successCB);
+        db.transaction(app.populateDB, app.errorCB, app.successCB);
     },
     // Populate Database
     populateDB: function(tx) {

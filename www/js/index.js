@@ -34,6 +34,16 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+        //Check if database exist
+        if (!db) {
+            //Database does not exist ; create it
+            db = window.openDatabase("ImageAD", "1.0", "PhoneGap Training", 800000);
+        }
+        //database exist ,insert data
+        db.transaction(this.populateDB, this.errorCB, this.successCB);  
+
+
+        
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -45,5 +55,93 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-    }
+        document.getElementById('sql-result').innerHTML = 'Received Event: ' + id;
+    },
+    // Populate Database
+    populateDB: function(tx) {
+    tx.executeSql('DROP TABLE IF EXISTS DEMO');
+
+
+    //Create table region
+    tx.executeSql('DROP TABLE IF EXISTS regions');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS regions (id unique, name)');
+    document.getElementById('sql-result').innerHTML = "Region Success has been notified";  
+
+
+    //Create table district
+    tx.executeSql('DROP TABLE IF EXISTS districts');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS districts (id unique, name, region_id)');
+    document.getElementById('sql-result').innerHTML = "Districts  Success has been notified";  
+
+  /* // Get Region List
+    $.ajax({
+        url: "http://agromis.mfarms.org/en/regions/getallregionsbycountry/1",
+        dataType:"json",
+        success:function (region_json) {
+            
+            //Add region into db
+            $.each(region_json, function(i,item){
+
+                db.transaction(function(tx){
+                    tx.executeSql('INSERT OR REPLACE INTO regions (id, name) VALUES ("'+item.id+'", "'+item.name+'")');
+                },function(tx,error){
+                    console.log(JSON.stringify(tx.message));
+                    console.log(JSON.stringify(error));
+                },function(){
+                    document.getElementById('sql-result').innerHTML = "Region "+ i + " Success has been notified";  
+                    });
+
+
+       });
+            
+            
+        },
+        error: function(model, response) {
+            document.getElementById('sql-result').innerHTML = response.responseText;
+        }
+    });
+
+    
+
+    
+    
+    //  Get District
+    $.ajax({
+        url: "http://agromis.mfarms.org/en/districts/GetDistrictByCountry/1",
+        dataType:"json",
+        success:function (district_json) {
+            
+            //Add District into db
+            $.each(district_json, function(i,item){
+
+                db.transaction(function(tx){
+                     tx.executeSql('INSERT OR REPLACE INTO districts (id, name, region_id) VALUES ("'+item.id+'", "'+item.name+'", "'+item.region_id+'")');
+                },function(tx,error){
+                    console.log(JSON.stringify(tx.message));
+                    console.log(JSON.stringify(error));
+                },function(){
+                    document.getElementById('sql-result').innerHTML = "District "+ i + " Success has been notified";    
+                    });
+
+
+       });
+            
+            
+        },
+        error: function(model, response) {
+            document.getElementById('sql-result').innerHTML = response.responseText;
+        }
+    });
+    */
+
+
+    },
+    // Transaction error callback
+    errorCB: function(tx, err) {
+      alert("Error processing SQL: "+err);
+    },
+    // Transaction success callback
+    successCB: function() {
+        alert("success!");
+    },
 };

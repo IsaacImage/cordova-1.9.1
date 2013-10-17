@@ -74,7 +74,7 @@
     document.getElementById('sql-result').innerHTML = "Adding Region automatically";  
 
   // Get Region List
-    $.ajax({
+  /*  $.ajax({
         url: "http://agromis.mfarms.org/en/regions/getallregionsbycountry/1",
         dataType:"json",
         success:function (region_json) {
@@ -100,13 +100,13 @@
             document.getElementById('sql-result').innerHTML = response.responseText;
         }
     });
-
+*/
     document.getElementById('sql-result').innerHTML = "Eding Region automatically"; 
     document.getElementById('sql-result').innerHTML = "Adding District automatically";  
     
     
     //  Get District
-    $.ajax({
+ /*   $.ajax({
         url: "http://agromis.mfarms.org/en/districts/GetDistrictByCountry/1",
         dataType:"json",
         success:function (district_json) {
@@ -131,7 +131,7 @@
         error: function(model, response) {
             document.getElementById('sql-result').innerHTML = response.responseText;
         }
-    });
+    });*/
     
     document.getElementById('sql-result').innerHTML = "Eding District automatically"; 
 

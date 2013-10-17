@@ -71,14 +71,14 @@
     document.getElementById('sql-result').innerHTML = "Districts  Success has been notified";  
 
 
-    document.getElementById('sql-result').innerHTML = "Addind Region automatically";  
+    document.getElementById('sql-result').innerHTML = "Adding Region automatically";  
 
   // Get Region List
     $.ajax({
         url: "http://agromis.mfarms.org/en/regions/getallregionsbycountry/1",
         dataType:"json",
         success:function (region_json) {
-            
+            document.getElementById('sql-result').innerHTML = "Adding Region automatically 10%"; 
             //Add region into db
             $.each(region_json, function(i,item){
 
@@ -101,8 +101,8 @@
         }
     });
 
-    
-    document.getElementById('sql-result').innerHTML = "Addind District automatically";  
+    document.getElementById('sql-result').innerHTML = "Eding Region automatically"; 
+    document.getElementById('sql-result').innerHTML = "Adding District automatically";  
     
     
     //  Get District
@@ -133,7 +133,7 @@
         }
     });
     
-
+    document.getElementById('sql-result').innerHTML = "Eding District automatically"; 
 
     }
 

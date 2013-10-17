@@ -1,47 +1,84 @@
+<!DOCTYPE html>
 <html>
-<head>
-<script src="css/source-sans-pro.js"></script>
-<link href="css/styles.css" rel="stylesheet">
-</head>
-<body>
+  <head>
+  	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width;" />
+    <title>My ToDo List</title>
+	<script type="text/javascript" src="cordova-2.0.0.js"></script>
+    <script type="text/javascript" src="xui.js"></script>
+	<script type="text/javascript">
+    // Set the event listener to run 
+	// when the device is ready
+	x$(document).on("deviceready", function () {
+		
+		var listElement 	= x$('#listItems');
+		var messageElement 	= x$('#message');
+		var db;
+		
+		x$('#saveItem').on('click', function(e) {
+			insertItem();
+		});
 
-<script id="home-tpl" type="text/x-handlebars-template">
-    <div class='header'><h1>Home</h1></div>
-    <div class='search-bar'><input class='search-key' type="search"/></div>
-    <div class="scroll"><ul class='employee-list'></ul></div>
-</script>
-
-<script id="employee-li-tpl" type="text/x-handlebars-template">
-    {{#.}}
-    <li><a href="#employees/{{this.id}}">{{this.firstName}} {{this.lastName}}<br/>{{this.title}}</a></li>
-    {{/.}}
-</script>
-
-<script id="employee-tpl" type="text/x-handlebars-template">
-    <div class='header'><a href='#' class="button header-button header-button-left">Back</a><h1>Details</h1></div>
-    <div class='details'>
-    <img id='image' src='img/{{firstName}}_{{lastName}}.jpg' style="float:left;margin:10px;"/>
-    <h1>{{firstName}} {{lastName}}</h1>
-    <h2>{{title}}</h2>
-    <span class="location"></span>
-    <ul>
-    <li><a href="tel:{{officePhone}}">Call Office<br/>{{officePhone}}</a></li>
-    <li><a href="tel:{{cellPhone}}">Call Cell<br/>{{cellPhone}}</a></li>
-    <li><a href="sms:{{cellPhone}}">SMS<br/>{{cellPhone}}</a></li>
-    <li><a href="#" class="add-location-btn">Add Location</a></li>
-    <li><a href="#" class="add-contact-btn">Add to Contacts</a></li>
-    <li><a href="#" class="change-pic-btn">Change Picture</a></li>
-    </ul>
-    </div>
-</script>
-
-<script src="phonegap.js"></script>
-<script src="lib/jquery-1.8.2.min.js"></script>
-<script src="lib/handlebars.js"></script>
-<script src="js/storage/memory-store.js"></script>
-<script src="js/HomeView.js"></script>
-<script src="js/EmployeeView.js"></script>
-<script src="js/main.js"></script>
-
-</body>
+		// Create a reference to the database
+		function getDatabase() {
+			return window.openDatabase("todoListDB", "1.0", "ToDoList Database", 200000);
+		}
+		
+		// Run the onDeviceReady method
+		onDeviceReady();
+	
+		// PhoneGap is ready
+	    function onDeviceReady() {
+	        db = getDatabase();
+	        db.transaction(function(tx) {
+	        	tx.executeSql('CREATE TABLE IF NOT EXISTS MYLIST (id INTEGER PRIMARY KEY AUTOINCREMENT, list_action)');
+			}, databaseError, getItems);		
+	    }
+		
+		// Run a select statement to pull out all records
+		function getItems() {
+	        db.transaction(function(tx) {
+				tx.executeSql('SELECT * FROM MYLIST', [], querySuccess, databaseError);
+			}, databaseError);
+	    }
+		
+		// Process the SQLResultSetList
+	    function querySuccess(tx, results) {
+	        var len = results.rows.length;
+			var output = '';
+	        for (var i=0; i<len; i++){
+			   output = output + '<li id="' + results.rows.item(i).id + '">' + results.rows.item(i).list_action + '</li>';
+	        }
+			messageElement.html('<p>There are ' + len + ' items in your list:</p>');
+			listElement.html('<ul>' + output + '</ul>');
+	    }
+		
+		// Database error handler
+	    function databaseError(error) {
+	        messageElement.html("SQL Error: " + error.code);
+	    }
+	
+		// Insert a record into the database
+		function insertItem() {
+			var insertValue = document.getElementById('list_action').value;
+			db.transaction(function(tx) {
+				tx.executeSql('INSERT INTO MYLIST (list_action) VALUES ("' + insertValue + '")');
+			}, databaseError, getItems);
+			// Clear the value from the input box
+			document.getElementById('list_action').value = '';
+		}
+	
+	});
+	
+    </script>
+  </head>
+  <body>
+    <h1>My ToDo List</h1>
+    
+	<input type="text" 		id="list_action" />
+	<input type="button" 	id="saveItem" value="Save" />
+	
+	<div id="message"></div>
+	<div id="listItems"></div>
+	
+  </body>
 </html>

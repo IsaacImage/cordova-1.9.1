@@ -26,7 +26,7 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-        document.getElementById('sql-result').innerHTML = 'bindEvents started';
+        document.getElementById('sql-result').innerHTML = 'bind Events started';
         document.addEventListener('deviceready', app.onDeviceReady, false);
     },
     // deviceready Event Handler

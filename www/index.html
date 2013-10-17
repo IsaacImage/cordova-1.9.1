@@ -70,7 +70,10 @@
     tx.executeSql('CREATE TABLE IF NOT EXISTS districts (id unique, name, region_id)');
     document.getElementById('sql-result').innerHTML = "Districts  Success has been notified";  
 
-  /* // Get Region List
+
+    document.getElementById('sql-result').innerHTML = "Addind Region automatically";  
+
+  // Get Region List
     $.ajax({
         url: "http://agromis.mfarms.org/en/regions/getallregionsbycountry/1",
         dataType:"json",
@@ -99,7 +102,7 @@
     });
 
     
-
+    document.getElementById('sql-result').innerHTML = "Addind District automatically";  
     
     
     //  Get District
@@ -129,7 +132,7 @@
             document.getElementById('sql-result').innerHTML = response.responseText;
         }
     });
-    */
+    
 
 
     }

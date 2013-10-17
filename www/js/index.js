@@ -33,32 +33,21 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        //app.receivedEvent('deviceready');
-        //Check if database exist
-        if (!db) {
-            //Database does not exist ; create it
-            db = window.openDatabase("ImageAD", "1.0", "PhoneGap Training", 800000);
-        }
-        //database exist ,insert data
-        db.transaction(this.populateDB, this.errorCB, this.successCB);  
-
-
-        
+        document.getElementById('sql-result').innerHTML = 'Create db Now';
+        app.createDB();        
     },
     // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+    createDB: function(id) {
+        if (!db) {
+            db = window.openDatabase("ImageAD", "1.0", "PhoneGap Training", 800000);
+        }
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
-        document.getElementById('sql-result').innerHTML = 'Received Event: ' + id;
+        document.getElementById('sql-result').innerHTML = 'Db creation proccess started';
+        db.transaction(this.populateDB, this.errorCB, this.successCB);
     },
     // Populate Database
     populateDB: function(tx) {
+    document.getElementById('sql-result').innerHTML = 'Db creation proccess started';
     tx.executeSql('DROP TABLE IF EXISTS DEMO');
 
 
